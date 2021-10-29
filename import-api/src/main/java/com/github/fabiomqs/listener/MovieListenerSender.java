@@ -1,6 +1,7 @@
-package com.example.demo.listener;
+package com.github.fabiomqs.listener;
 
-import com.example.demo.event.MovieEvent;
+import com.github.fabiomqs.dto.MovieMessageDTO;
+import com.github.fabiomqs.event.MovieEvent;
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -32,16 +33,7 @@ public class MovieListenerSender {
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     public void listenMovieEventAndSendNotification(MovieEvent movieEvent) {
         try {
-            JsonFactory factory = new JsonFactory();
-            StringWriter jsonObjectWriter = new StringWriter();
-            JsonGenerator generator = factory.createGenerator(jsonObjectWriter);
-            generator.useDefaultPrettyPrinter(); // pretty print JSON
-            generator.writeStartObject();
-            generator.writeFieldName("id_movie");
-            generator.writeNumber(movieEvent.getId());
-            generator.writeFieldName("message");
-            generator.writeString("Movie Change");
-            String message = jsonObjectWriter.toString();
+            MovieMessageDTO message = new MovieMessageDTO(movieEvent.getId() + "", "Movie Change");
             log.info("Sending message: {}", new ObjectMapper().writeValueAsString(message));
             rabbitTemplate.convertAndSend(movieTopicExchange, movieKey, message);
             log.info("Message was sent successfully!");

@@ -1,15 +1,14 @@
-package com.example.demo.service;
+package com.github.fabiomqs.service;
 
-import com.example.demo.event.MovieEvent;
-import com.example.demo.model.Genre;
-import com.example.demo.model.Movie;
-import com.example.demo.repository.GenreRepository;
-import com.example.demo.repository.MovieRepository;
+import com.github.fabiomqs.event.MovieEvent;
+import com.github.fabiomqs.model.Genre;
+import com.github.fabiomqs.model.Movie;
+import com.github.fabiomqs.repository.GenreRepository;
+import com.github.fabiomqs.repository.MovieRepository;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ResourceUtils;
-import org.springframework.web.bind.annotation.PathVariable;
 
 import java.io.File;
 import java.io.FileNotFoundException;

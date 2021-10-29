@@ -1,4 +1,4 @@
-package com.example.demo.config;
+package com.github.fabiomqs.elastic.config;
 
 import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.BindingBuilder;

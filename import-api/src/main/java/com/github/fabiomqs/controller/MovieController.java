@@ -1,8 +1,8 @@
-package com.example.demo.controller;
+package com.github.fabiomqs.controller;
 
-import com.example.demo.dto.SuccessResponse;
-import com.example.demo.model.Movie;
-import com.example.demo.service.MovieService;
+import com.github.fabiomqs.dto.SuccessResponse;
+import com.github.fabiomqs.model.Movie;
+import com.github.fabiomqs.service.MovieService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 

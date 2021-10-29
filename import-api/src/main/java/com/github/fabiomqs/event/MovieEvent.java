@@ -1,4 +1,4 @@
-package com.example.demo.event;
+package com.github.fabiomqs.event;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
