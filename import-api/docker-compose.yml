@@ -1,0 +1,25 @@
+version: "3"
+services:
+
+    movies-db:
+        image: postgres:11
+        container_name: movies-db
+        environment:
+            - POSTGRES_DB=movies-db
+            - POSTGRES_USER=admin
+            - POSTGRES_PASSWORD=123456
+        volumes:
+            - C:\\dockerdata\\postgres\\movies:/var/lib/postgresql/data
+        ports:
+            - 5433:5432
+
+    rabbitmq:
+        image: rabbitmq:3.9-management
+        container_name: rabbitmq
+        ports:
+            - 5672:5672
+            - 15672:15672
+            - 25676:25676
+        environment:
+            - RABBITMQ_DEFAULT_USER=guest
+            - RABBITMQ_DEFAULT_PASS=guest
