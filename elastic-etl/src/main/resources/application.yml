@@ -30,6 +30,10 @@ spring:
         username: ${RABBIT_MQ_USER:guest}
         password: ${RABBIT_MQ_PASSWORD:guest}
 
+elasticsearch:
+    host: localhost
+    port: 9300
+
 app-config:
     rabbit:
         exchange:
