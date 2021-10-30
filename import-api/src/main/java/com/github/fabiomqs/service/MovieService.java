@@ -30,13 +30,14 @@ public class MovieService {
         this.applicationEventPublisher = applicationEventPublisher;
     }
 
+    @Transactional
     public void importMovies() throws FileNotFoundException {
 
-        File file = ResourceUtils.getFile("classpath:csv/movies.csv");
+        File file = ResourceUtils.getFile("classpath:csv/movies_50.csv");
 
         List<Movie> records = new ArrayList<>();
         Scanner scanner = new Scanner(file);
-        scanner.hasNextLine();
+        scanner.nextLine();
         while (scanner.hasNextLine()) {
             records.add(getRecordFromLine(scanner.nextLine()));
         }
@@ -54,11 +55,7 @@ public class MovieService {
         movie.getGenres().add(genre);
         movieRepository.save(movie);
         applicationEventPublisher
-                .publishEvent(
-                        MovieEvent.builder()
-                                .id(idMovie)
-                                .type("UPDATE")
-                                .build());
+                .publishEvent(new MovieEvent(idMovie, "UPDATE"));
     }
 
     public Movie getMovie(Long id) throws Exception {
@@ -66,15 +63,11 @@ public class MovieService {
                 .orElseThrow(() -> new Exception("Wrong idMovie"));
     }
 
-    @Transactional
+
     private void addNewMovie(Movie movie) {
         Movie savedMovie = movieRepository.save(movie);
         applicationEventPublisher
-                .publishEvent(
-                        MovieEvent.builder()
-                                .id(savedMovie.getId())
-                                .type("CREATE")
-                                .build());
+                .publishEvent(new MovieEvent(savedMovie.getId(), "CREATE"));
     }
 
     private Movie getRecordFromLine(String line) {
@@ -87,29 +80,33 @@ public class MovieService {
         }
 
         List<Movie> movies = new ArrayList<>();
-        Movie movie = Movie.builder()
-                .movieId(values.get(0))
-                .title(values.get(1))
-                .build();
+        Movie movie = new Movie(values.get(0), values.get(1));
+
+    //    String strGenres = values.get(2);
+    //    for(String strGenre : strGenres.split("\\|")) {
+    //        Genre genre = getGenreByName(strGenre);
+    //        genre.addMovie(movie);
+    //    }
+
         Scanner rowScanner = new Scanner(values.get(2));
-        rowScanner.useDelimiter("|");
+        rowScanner.useDelimiter("\\|");
         Set<Genre> genres = new HashSet<>();
         while (rowScanner.hasNext()) {
-            Genre genre = getGenreByName(rowScanner.next());
-            genre.getMovies().add(movie);
-            genres.add(genre);
+            String strGenre = rowScanner.next();
+            Genre genre = getGenreByName(strGenre);
+            genre.addMovie(movie);
         }
-        movie.setGenres(genres);
+        //movie.setGenres(genres);
 
         return movie;
     }
 
     private Genre getGenreByName(String name) {
-        return genreRepository
-                .findByName(name)
-                .orElse(
-                        Genre.builder()
-                                .name(name)
-                                .build());
+        Genre genre = genreRepository.findByName(name);
+        if(genre != null)
+            return genre;
+        Genre newGenre = new Genre(name);
+        Genre savedGenre = genreRepository.save(newGenre);
+        return savedGenre;
     }
 }

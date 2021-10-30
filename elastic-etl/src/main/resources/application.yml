@@ -34,11 +34,8 @@ elasticsearch:
     host: localhost
     port: 9300
 
-app-config:
+app:
     rabbit:
-        exchange:
-            movie: movie.topic
-        routingKey:
-            movie: movie-insert.routingKey
-        queue:
-            movie: movie-insert.queue
+        exchange: movie.topic
+        routingKey: movie.routingKey
+        queue: movie.queue

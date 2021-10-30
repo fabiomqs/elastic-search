@@ -3,7 +3,6 @@ package com.github.fabiomqs.controller;
 import com.github.fabiomqs.dto.SuccessResponse;
 import com.github.fabiomqs.model.Movie;
 import com.github.fabiomqs.service.MovieService;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.FileNotFoundException;
@@ -21,11 +20,7 @@ public class MovieController {
     @GetMapping("/import")
     public SuccessResponse importMovies() throws FileNotFoundException {
         movieService.importMovies();
-        return SuccessResponse
-                .builder()
-                .status(HttpStatus.OK.value())
-                .message("ok")
-                .build();
+        return SuccessResponse.create("OK");
     }
 
     @PostMapping("/add/genre/{idMovie}/{idGenre}")
@@ -33,11 +28,7 @@ public class MovieController {
             @PathVariable Long idMovie,
             @PathVariable Long idGenre) throws Exception {
         movieService.addGenre(idMovie, idGenre);
-        return SuccessResponse
-                .builder()
-                .status(HttpStatus.OK.value())
-                .message("ok")
-                .build();
+        return SuccessResponse.create("OK");
     }
 
     @GetMapping("/{id}")

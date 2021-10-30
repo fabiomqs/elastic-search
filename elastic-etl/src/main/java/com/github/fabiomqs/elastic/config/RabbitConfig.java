@@ -13,13 +13,13 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class RabbitConfig {
 
-    @Value("${app-config.rabbit.exchange.movie}")
+    @Value("${app.rabbit.exchange}")
     private String movieTopicExchange;
 
-    @Value("${app-config.rabbit.routingKey.movie}")
+    @Value("${app.rabbit.routingKey}")
     private String movieKey;
 
-    @Value("${app-config.rabbit.queue.movie}")
+    @Value("${app.rabbit.queue}")
     private String movieMq;
 
     @Bean
@@ -33,7 +33,7 @@ public class RabbitConfig {
     }
 
     @Bean
-    public Binding productStockMqBinding(TopicExchange topicExchange) {
+    public Binding movieMqBinding(TopicExchange topicExchange) {
         return BindingBuilder
                 .bind(movieMq())
                 .to(topicExchange)

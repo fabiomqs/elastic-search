@@ -1,25 +1,36 @@
 package com.github.fabiomqs.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 import org.springframework.http.HttpStatus;
 
-@Data
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
 public class SuccessResponse {
 
     private Integer status;
     private String message;
 
-    public static SuccessResponse create(String message) {
-        return SuccessResponse
-                .builder()
-                .status(HttpStatus.OK.value())
-                .message(message)
-                .build();
+    public SuccessResponse(Integer status, String message) {
+        this.status = status;
+        this.message = message;
     }
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
+    public static SuccessResponse create(String message) {
+        return new SuccessResponse(HttpStatus.OK.value(), message);
+    }
+
+
 }

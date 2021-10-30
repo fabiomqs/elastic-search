@@ -1,16 +1,13 @@
 package com.github.fabiomqs.model;
 
-import lombok.*;
-
 import javax.persistence.*;
+import java.io.Serializable;
+import java.util.HashSet;
 import java.util.Set;
 
-@Data
+
 @Entity
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
-public class Movie {
+public class Movie  implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -20,11 +17,104 @@ public class Movie {
 
     private String title;
 
-    @Singular
+    private String year;
+
     @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(name = "movie_genre",
             joinColumns = @JoinColumn(name = "movie_id"),
             inverseJoinColumns = @JoinColumn(name = "genre_id")
     )
-    private Set<Genre> genres;
+    private Set<Genre> genres = new HashSet<>();
+
+    public Movie() {
+    }
+
+    public Movie(String movieId, String title) {
+        this.movieId = movieId;
+        this.setTitleAndYear(title);
+    }
+
+    private void setTitleAndYear(String title) {
+        String temp = title.replaceAll("\"", "");
+        String tempTitle = temp.substring(0, temp.length() - 7);
+        //Toy Story (1995)
+        String tempYear = temp.substring(temp.length() - 5, temp.length() - 1);
+        this.title = tempTitle;
+        this.year = tempYear;
+        System.out.println(tempTitle);
+    }
+
+    public Movie(Long id, String movieId, String title, String year, Set<Genre> genres) {
+        this.id = id;
+        this.movieId = movieId;
+        this.title = title;
+        this.year = year;
+        if(genres != null)
+            this.genres = genres;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getMovieId() {
+        return movieId;
+    }
+
+    public void setMovieId(String movieId) {
+        this.movieId = movieId;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public Set<Genre> getGenres() {
+        return genres;
+    }
+
+    public void setGenres(Set<Genre> genres) {
+        this.genres = genres;
+    }
+
+    public String getYear() {
+        return year;
+    }
+
+    public void setYear(String year) {
+        this.year = year;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof Movie)) {
+            return false;
+        }
+        return id != null && id.equals(((Movie) o).id);
+    }
+
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
+    }
+
+    @Override
+    public String toString() {
+        return "Movie{" +
+                "id=" + getId() +
+                ", movieId='" + getMovieId() + "'" +
+                ", title='" + getTitle() + "'" +
+                "}";
+    }
 }
