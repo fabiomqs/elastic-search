@@ -34,7 +34,7 @@ public class ElasticService {
     public void createMovieIndex() {
         CreateIndexResponse response =
                 client.admin().indices().prepareCreate(INDEX_PREFIX + "movies") //java_movies
-                        .addMapping("properties","year","type=date")
+                        .addMapping("doc","year","type=date")
                 .get();
         System.out.println("response " + response.isAcknowledged());
     }
@@ -49,8 +49,8 @@ public class ElasticService {
         for(Genre genre : movie.getGenres()) {
             genres[i++] = genre.getName();
         }
-
-        IndexResponse response = client.prepareIndex(INDEX_PREFIX + "movies", "_doc", movie.getMovieId())
+        //_doc
+        IndexResponse response = client.prepareIndex(INDEX_PREFIX + "movies", "doc", movie.getMovieId())
                 .setSource(jsonBuilder()
                         .startObject()
                         .field("db_id", movie.getId())
