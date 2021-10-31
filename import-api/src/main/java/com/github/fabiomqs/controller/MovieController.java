@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import java.io.FileNotFoundException;
 
 @RestController
-@RequestMapping("/api/movies")
+@RequestMapping("")
 public class MovieController {
 
     private final MovieService movieService;
