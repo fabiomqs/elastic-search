@@ -105,14 +105,13 @@ public class ElasticService {
     }
 
     public void buildJason() throws IOException {
-        System.out.println(Strings.toString(jsonBuilder()
-                .startObject()
-                .startObject("id").field("type", "integer").endObject()
-                .startObject("db_id").field("type", "integer").endObject()
-                .startObject("year").field("type", "integer").endObject()
-                .startObject("genre").field("type", "keyword").endObject()
-                .startObject("title").field("type", "text").field("analyzer", "english").endObject()
-                .endObject().prettyPrint()));
+        XContentBuilder builder = XContentFactory.jsonBuilder();
+        builder.startObject();
+        for(int i = 1; i <= 10001;i++) {
+            builder.field("" + i, "" + i);
+        }
+        builder.endObject();
+        System.out.println(Strings.toString(builder.prettyPrint()));
     }
 
     public void indexMovie(long idMovie) throws Exception {

@@ -47,6 +47,23 @@ public class MovieService {
     }
 
     @Transactional
+    public void importAllMovies() throws FileNotFoundException {
+
+        File file = ResourceUtils.getFile("classpath:csv/movies.csv");
+
+        List<Movie> records = new ArrayList<>();
+        Scanner scanner = new Scanner(file);
+        scanner.nextLine();
+        while (scanner.hasNextLine()) {
+            records.add(getRecordFromLine2(scanner.nextLine()));
+        }
+        for(Movie movie : records) {
+            System.out.println(movie.toString());
+            //addNewMovie(movie);
+        }
+    }
+
+    @Transactional
     public void addGenre(Long idMovie, Long idGenre) throws Exception {
         Movie movie = movieRepository.findById(idMovie)
                 .orElseThrow(() -> new Exception("Wrong idMovie"));
@@ -81,13 +98,6 @@ public class MovieService {
 
         List<Movie> movies = new ArrayList<>();
         Movie movie = new Movie(values.get(0), values.get(1));
-
-    //    String strGenres = values.get(2);
-    //    for(String strGenre : strGenres.split("\\|")) {
-    //        Genre genre = getGenreByName(strGenre);
-    //        genre.addMovie(movie);
-    //    }
-
         Scanner rowScanner = new Scanner(values.get(2));
         rowScanner.useDelimiter("\\|");
         Set<Genre> genres = new HashSet<>();
@@ -96,7 +106,43 @@ public class MovieService {
             Genre genre = getGenreByName(strGenre);
             genre.addMovie(movie);
         }
-        //movie.setGenres(genres);
+
+        return movie;
+    }
+
+    private Movie getRecordFromLine2(String line) {
+        List<String> values = new ArrayList<>();
+        try (Scanner rowScanner = new Scanner(line)) {
+            rowScanner.useDelimiter(",");
+            while (rowScanner.hasNext()) {
+                values.add(rowScanner.next());
+            }
+        }
+        if(values.size() > 3) {
+            List<String> temp = new ArrayList<>();
+            temp.add(values.get(0));
+            String titleComplete = values.get(1);
+            for(int i = 2; i <= values.size() -2;i++) {
+                titleComplete += ", " + values.get(i);
+            }
+            temp.add(titleComplete);
+            temp.add(values.get(values.size() -1));
+            values = temp;
+        }
+
+        List<Movie> movies = new ArrayList<>();
+        Movie movie = new Movie(values.get(0), values.get(1));
+        if(!line.contains("no genres listed")) {
+            Scanner rowScanner = new Scanner(values.get(2));
+            rowScanner.useDelimiter("\\|");
+            Set<Genre> genres = new HashSet<>();
+            while (rowScanner.hasNext()) {
+                String strGenre = rowScanner.next();
+                Genre genre = new Genre(strGenre);
+                //Genre genre = getGenreByName(strGenre);
+                genre.addMovie(movie);
+            }
+        }
 
         return movie;
     }

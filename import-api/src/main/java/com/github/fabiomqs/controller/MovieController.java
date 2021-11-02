@@ -23,6 +23,12 @@ public class MovieController {
         return SuccessResponse.create("OK");
     }
 
+    @GetMapping("/importall")
+    public SuccessResponse importMoviesAll() throws FileNotFoundException {
+        movieService.importAllMovies();
+        return SuccessResponse.create("OK");
+    }
+
     @PostMapping("/add/genre/{idMovie}/{idGenre}")
     public SuccessResponse addGenre(
             @PathVariable Long idMovie,

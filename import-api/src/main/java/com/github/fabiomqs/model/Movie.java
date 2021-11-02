@@ -115,6 +115,7 @@ public class Movie  implements Serializable {
                 "id=" + getId() +
                 ", movieId='" + getMovieId() + "'" +
                 ", title='" + getTitle() + "'" +
+                ", year=" + Integer.parseInt(getYear()) +
                 "}";
     }
 }
